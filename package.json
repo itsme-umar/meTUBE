@@ -12,12 +12,13 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "dev"
+    "dev": "nodemon src/index.js"
   },
   "dependencies": {
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "prettier": "^3.9.6"
   }
 }
