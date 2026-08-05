@@ -1,0 +1,23 @@
+{
+  "name": "metube",
+  "version": "1.0.0",
+  "description": "Backend service for the meTUBE application",
+  "keywords": [
+    "javascript",
+    "express",
+    "backend"
+  ],
+  "license": "ISC",
+  "author": "Umar Imtiaz",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "dev"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
