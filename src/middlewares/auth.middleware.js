@@ -13,8 +13,6 @@ export const JWTVerify = asyncHandler(async (req, _, next) => {
       throw new ApiError(401, "Unauthorized Request");
     }
 
-    console.log("token", token);
-
     const decodedToken = await jwt.verify(
       token,
       process.env.ACCESS_TOKEN_SECRET
