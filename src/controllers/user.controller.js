@@ -2,7 +2,10 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
-import { uploadOnCloudinary } from "../utils/fileUpload.js";
+import {
+  deleteFromCloudinary,
+  uploadOnCloudinary,
+} from "../utils/fileUpload.js";
 import jwt from "jsonwebtoken";
 
 const generateAccessAndRefereshTokens = async (userId) => {
@@ -291,14 +294,14 @@ const updateAccoutDetails = asyncHandler(async (req, res) => {
 
 const updateUserAvatar = asyncHandler(async (req, res) => {
   const avatarLocalPath = req.file?.path;
-
-  console.log(avatarLocalPath);
+  const oldAvatarUrl = await req.user.avatar;
 
   const avatar = await uploadOnCloudinary(avatarLocalPath);
 
   if (!avatar) {
     throw new ApiError(400, "Avatar File is requried");
   }
+
   const user = await User.findByIdAndUpdate(
     req.user._id,
     {
@@ -309,6 +312,8 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
     { new: true }
   ).select("-password -refreshToken");
 
+  await deleteFromCloudinary(oldAvatarUrl);
+
   return res
     .status(200)
     .json(new ApiResponse(200, "Avatar Updated Successfully", user));
@@ -318,8 +323,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
   // const coverImageLocalPath = req.files?.coverImage[0].path; //this is used when there is more then one files in the body of the request
 
   const coverImageLocalPath = req.file?.path;
-
-  console.log(coverImageLocalPath);
+  const oldCoverImageUrl = req.user.coverImage;
 
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
@@ -335,6 +339,8 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
     },
     { new: true }
   ).select("-password -refreshToken");
+
+  await deleteFromCloudinary(oldCoverImageUrl);
 
   return res
     .status(200)
